@@ -3,9 +3,11 @@ import React, {useEffect, useState} from 'react';
 import colors from '../misc/colors';
 import SearchBar from '../components/SearchBar';
 import RoundIconBtn from '../components/RoundIconBtn';
+import NoteInputModal from '../components/NoteInputModal';
 
 const NoteScreen = ({user}) => {
   const [greet, setGreet] = useState('Evening');
+  const [modalVisible, setModalVisible] = useState(false);
 
   const findGreet = () => {
     const hours = new Date().getHours();
@@ -17,17 +19,31 @@ const NoteScreen = ({user}) => {
     findGreet();
   }, []);
 
+  const handleOnSubmit = (title, desc) => {
+    console.log(title, desc);
+  }
+
   return (
     <>
       <StatusBar barStyle={'dark-content'} backgroundColor={colors.LIGHT} />
       <View style={styles.container}>
         <Text style={styles.header}>{`Good ${greet} ${user.name}`}</Text>
         <SearchBar containerStyle={{marginVertical: 15}} />
-        <View style={[StyleSheet.absoluteFillObject,styles.emptyHeaderContainer]}>
+        <View
+          style={[StyleSheet.absoluteFillObject, styles.emptyHeaderContainer]}>
           <Text style={styles.emptyHeader}>Add Notes</Text>
-          <RoundIconBtn onPress={() => console.log('opening modal')} IconName={"add-circle-outline"} style={styles.addBtn} />
+          <RoundIconBtn
+            onPress={() => setModalVisible(true)}
+            IconName={'add-circle-outline'}
+            style={styles.addBtn}
+          />
         </View>
       </View>
+      <NoteInputModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSubmit={handleOnSubmit}
+      />
     </>
   );
 };
@@ -45,10 +61,10 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   emptyHeaderContainer: {
-    flex:1,
-    justifyContent:"center",
-    alignItems:"center",
-    zIndex:-1,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: -1,
   },
   emptyHeader: {
     fontSize: 30,
@@ -57,9 +73,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     opacity: 0.2,
   },
-  addBtn:{
-    position:"absolute",
-    right:20,
-    bottom:50,
-  }
+  addBtn: {
+    position: 'absolute',
+    right: 20,
+    bottom: 50,
+  },
 });
