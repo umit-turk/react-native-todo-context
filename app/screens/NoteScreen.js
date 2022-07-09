@@ -14,11 +14,13 @@ import RoundIconBtn from '../components/RoundIconBtn';
 import NoteInputModal from '../components/NoteInputModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Note from '../components/Note';
+import { useNotes } from '../context/NoteProvider';
 
 const NoteScreen = ({user, navigation}) => {
   const [greet, setGreet] = useState('Evening');
   const [modalVisible, setModalVisible] = useState(false);
-  const [notes, setNotes] = useState([]);
+  const {notes, setNotes} = useNotes()
+
 
   const findGreet = () => {
     const hours = new Date().getHours();
@@ -27,15 +29,10 @@ const NoteScreen = ({user, navigation}) => {
     setGreet('Evening');
   };
 
-  const findNotes = async () => {
-    const result = await AsyncStorage.getItem('notes');
-    console.log(result);
-    if (result !== null) setNotes(JSON.parse(result));
-  };
+ 
 
   useEffect(() => {
     
-    findNotes();
     findGreet();
   }, []);
 
